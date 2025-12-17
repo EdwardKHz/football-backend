@@ -1,7 +1,9 @@
 import app from './src/app.js';
+import {DB_HOST, DB_NAME, SERVER_PORT} from "./src/utils/config.js";
 
-const PORT = process.env.PORT || 3000;
+const port = SERVER_PORT
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
