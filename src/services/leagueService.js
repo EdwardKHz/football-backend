@@ -13,7 +13,6 @@ export async function getTopLeagues() {
     return res.rows;
 }
 
-//needs to be fixed <?>
 export async function getAllLeagues() {
     const res = await pool.query(
         `
