@@ -24,3 +24,16 @@ export async function getAllLeagues() {
     );
     return res.rows;
 }
+
+export async function getLeagueStandings(leagueID, year) {
+    const res = await pool.query(
+        `
+            SELECT *
+            FROM standings
+            WHERE league_id = $1 AND season = $2
+            ORDER BY position ASC
+        `,
+        [leagueID, year]
+    );
+    return res.rows;
+}
