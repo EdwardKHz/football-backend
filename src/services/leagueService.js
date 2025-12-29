@@ -25,13 +25,26 @@ export async function getAllLeagues() {
     return res.rows;
 }
 
+export async function getLeagueInfo(id) {
+    const res = await pool.query(
+        `
+        SELECT name, type, logo, country_name 
+        FROM league
+        WHERE ID = $1
+        `,
+        [id]
+    )
+    return res.rows[0];
+}
+
 export async function getLeagueStandings(leagueID, year) {
     const res = await pool.query(
         `
             SELECT *
-            FROM standings
+            FROM standings s
+            JOIN team t ON t.id = s.team_id
             WHERE league_id = $1 AND season = $2
-            ORDER BY position ASC
+            ORDER BY rank ASC
         `,
         [leagueID, year]
     );

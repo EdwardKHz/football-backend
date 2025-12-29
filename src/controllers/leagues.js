@@ -1,5 +1,5 @@
 import express from 'express';
-import {getAllLeagues, getLeagueStandings, getTopLeagues} from "../services/leagueService.js";
+import {getAllLeagues, getLeagueInfo, getLeagueStandings, getTopLeagues} from "../services/leagueService.js";
 const leagueRouter = express.Router();
 
 
@@ -23,11 +23,27 @@ leagueRouter.get('/all', async (req, res) => {
     }
 });
 
+leagueRouter.get('/:leagueID', async (req, res) => {
+    try {
+        const { leagueID } = req.params;
+
+        const league = await getLeagueInfo(leagueID);
+
+        if(!league) {
+            return res.status(404).json({ error: 'League not found' });
+        }
+        res.json(league);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch league info' });
+    }
+});
+
 leagueRouter.get('/:leagueID/standings/:season', async (req, res) => {
     try {
-        const { leagueId, season } = req.params;
+        const { leagueID, season } = req.params;
 
-        const standings = await getLeagueStandings(leagueId, season);
+        const standings = await getLeagueStandings(leagueID, season);
 
         if(!standings) {
             return res.status(400).json({ error: 'Standings not available for this league and season' });

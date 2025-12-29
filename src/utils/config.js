@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config({path: '../../.env'});
+dotenv.config();
 
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
