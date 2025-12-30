@@ -54,9 +54,11 @@ export async function getLeagueStandings(leagueID, year) {
 export async function getLeagueTopScorers(leagueID, year) {
     const res = await pool.query(
         `
-            SELECT playerid, teamid, goals_scored, penalties_scored
-            FROM league_top_scorers
-            WHERE leagueid = $1 AND season = $2;
+            SELECT l.playerid, l.goals_scored, l.penalties_scored, p.name, p.photo, t.logo, t.name as team_name FROM league_top_scorers l
+            JOIN players p ON p.id = l.playerid
+            JOIN team t ON t.id = l.teamid
+            WHERE l.leagueid = $1 AND season = $2
+            ORDER BY l.goals_scored DESC;
         `,
         [leagueID, year]
     );
@@ -66,9 +68,11 @@ export async function getLeagueTopScorers(leagueID, year) {
 export async function getLeagueTopAssisters(leagueID, year) {
     const res = await pool.query(
         `
-            SELECT playerid, teamid, assists, key_passes
-            FROM league_top_assisters
-            WHERE leagueid = $1  AND season = $2;
+            SELECT l.playerid, l.assists, l.key_passes, p.name, p.photo, t.logo, t.name FROM league_top_assisters l
+            JOIN players p ON p.id = l.playerid
+            JOIN team t ON t.id = l.teamid
+            WHERE l.leagueid = $1 AND season = $2
+            ORDER BY l.assists DESC;
         `,
         [leagueID,year]
     );
@@ -78,10 +82,11 @@ export async function getLeagueTopAssisters(leagueID, year) {
 export async function getLeagueMostYellowCards(leagueID, year) {
     const res = await pool.query(
         `
-            SELECT playerid, teamid, yellow_cards, red_cards
-            FROM league_most_yellow_cards
-            WHERE leagueid = $1 AND season = $2
-            ORDER BY yellow_cards DESC;
+            SELECT l.playerid, l.yellow_cards, l.red_cards, p.name, p.photo, t.logo, t.name FROM league_most_yellow_cards l
+            JOIN players p ON p.id = l.playerid
+            JOIN team t ON t.id = l.teamid
+            WHERE l.leagueid = $1 AND season = $2
+            ORDER BY l.yellow_cards DESC;
         `,
         [leagueID,year]
     );
@@ -91,10 +96,11 @@ export async function getLeagueMostYellowCards(leagueID, year) {
 export async function getLeagueMostRedCards(leagueID, year) {
     const res = await pool.query(
         `
-            SELECT playerid, teamid, red_cards, yellow_cards
-            FROM league_most_red_cards
-            WHERE leagueid = $1  AND season = $2
-            ORDER BY red_cards DESC;
+            SELECT l.playerid, l.yellow_cards, l.red_cards, p.name, p.photo, t.logo, t.name FROM league_most_red_cards l
+            JOIN players p ON p.id = l.playerid
+            JOIN team t ON t.id = l.teamid
+            WHERE l.leagueid = $1 AND season = $2
+            ORDER BY l.red_cards DESC;
         `,
         [leagueID,year]
     );
