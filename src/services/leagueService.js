@@ -50,3 +50,57 @@ export async function getLeagueStandings(leagueID, year) {
     );
     return res.rows;
 }
+
+export async function getLeagueTopScorers(leagueID, year) {
+    const res = await pool.query(
+        `
+            SELECT playerid, teamid, goals_scored, penalties_scored
+            FROM league_top_scorers
+            WHERE leagueid = $1 AND season = $2;
+        `,
+        [leagueID, year]
+    );
+    return res.rows;
+}
+
+export async function getLeagueTopAssisters(leagueID, year) {
+    const res = await pool.query(
+        `
+            SELECT playerid, teamid, assists, key_passes
+            FROM league_top_assisters
+            WHERE leagueid = $1  AND season = $2;
+        `,
+        [leagueID,year]
+    );
+    return res.rows;
+}
+
+export async function getLeagueMostYellowCards(leagueID, year) {
+    const res = await pool.query(
+        `
+            SELECT playerid, teamid, yellow_cards, red_cards
+            FROM league_most_yellow_cards
+            WHERE leagueid = $1 AND season = $2
+            ORDER BY yellow_cards DESC;
+        `,
+        [leagueID,year]
+    );
+    return res.rows;
+}
+
+export async function getLeagueMostRedCards(leagueID, year) {
+    const res = await pool.query(
+        `
+            SELECT playerid, teamid, red_cards, yellow_cards
+            FROM league_most_red_cards
+            WHERE leagueid = $1  AND season = $2
+            ORDER BY red_cards DESC;
+        `,
+        [leagueID,year]
+    );
+    return res.rows;
+}
+
+
+
+
