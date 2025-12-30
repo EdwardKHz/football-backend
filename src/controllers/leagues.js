@@ -1,7 +1,7 @@
 import express from 'express';
 import {
     getAllLeagues,
-    getLeagueInfo, getLeagueMostRedCards,
+    getLeagueInfo, getLeagueMostRedCards, getLeagueMostYellowCards,
     getLeagueStandings, getLeagueTopAssisters,
     getLeagueTopScorers,
     getTopLeagues
@@ -65,7 +65,7 @@ leagueRouter.get('/:leagueID/standings/:season', async (req, res) => {
 
 leagueRouter.get('/:leagueID/topScorers/:season', async (req, res) => {
     try {
-        const { leagueID, season } = req.params();
+        const { leagueID, season } = req.params;
 
         const topScorers = await getLeagueTopScorers(leagueID, season);
 
