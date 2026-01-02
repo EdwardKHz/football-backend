@@ -107,6 +107,19 @@ export async function getLeagueMostRedCards(leagueID, year) {
     return res.rows;
 }
 
+export async function getLeagueWinners(leagueID) {
+    const res = await pool.query(
+        `
+            SELECT t.name, t.logo, s.season, s.rank
+            FROM standings s
+            JOIN team t ON t.id = s.team_id
+            WHERE s.league_id = $1 
+            AND s.rank IN (1, 2);
+        `,
+        [leagueID]
+    );
+    return res.rows;
 
+}
 
 
