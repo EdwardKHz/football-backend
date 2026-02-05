@@ -1,7 +1,7 @@
 import express from 'express';
 import {
     getAllLeagues,
-    getLeagueInfo, getLeagueMostRedCards, getLeagueMostYellowCards,
+    getLeagueInfo, getLeagueMostRedCards, getLeagueMostYellowCards, getLeagueSeasons,
     getLeagueStandings, getLeagueTopAssisters,
     getLeagueTopScorers, getLeagueWinners,
     getTopLeagues
@@ -147,5 +147,25 @@ leagueRouter.get('/:leagueID/seasons/winners', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch league season winners' });
     }
 });
+
+leagueRouter.get('/:leagueID/seasons', async (req, res) => {
+    try {
+        const { leagueID } = req.params;
+
+        const seasons = await getLeagueSeasons(leagueID);
+
+        const years = seasons.map(season => season.year);
+
+        if (!seasons) {
+            return res.status(400).json({ error: 'Seasons not available for this league' });
+        }
+
+        res.json(years);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch league seasons' });
+    }
+});
+
 
 export default leagueRouter;

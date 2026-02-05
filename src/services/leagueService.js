@@ -68,7 +68,7 @@ export async function getLeagueTopScorers(leagueID, year) {
 export async function getLeagueTopAssisters(leagueID, year) {
     const res = await pool.query(
         `
-            SELECT l.playerid, l.assists, l.key_passes, p.name, p.photo, t.logo, t.name FROM league_top_assisters l
+            SELECT l.playerid, l.assists, l.key_passes, p.name, p.photo, t.logo, t.name as team_name FROM league_top_assisters l
             JOIN players p ON p.id = l.playerid
             JOIN team t ON t.id = l.teamid
             WHERE l.leagueid = $1 AND season = $2
@@ -82,7 +82,7 @@ export async function getLeagueTopAssisters(leagueID, year) {
 export async function getLeagueMostYellowCards(leagueID, year) {
     const res = await pool.query(
         `
-            SELECT l.playerid, l.yellow_cards, l.red_cards, p.name, p.photo, t.logo, t.name FROM league_most_yellow_cards l
+            SELECT l.playerid, l.yellow_cards, l.red_cards, p.name, p.photo, t.logo, t.name as team_name FROM league_most_yellow_cards l
             JOIN players p ON p.id = l.playerid
             JOIN team t ON t.id = l.teamid
             WHERE l.leagueid = $1 AND season = $2
@@ -96,7 +96,7 @@ export async function getLeagueMostYellowCards(leagueID, year) {
 export async function getLeagueMostRedCards(leagueID, year) {
     const res = await pool.query(
         `
-            SELECT l.playerid, l.yellow_cards, l.red_cards, p.name, p.photo, t.logo, t.name FROM league_most_red_cards l
+            SELECT l.playerid, l.yellow_cards, l.red_cards, p.name, p.photo, t.logo, t.name as team_name FROM league_most_red_cards l
             JOIN players p ON p.id = l.playerid
             JOIN team t ON t.id = l.teamid
             WHERE l.leagueid = $1 AND season = $2
@@ -119,7 +119,18 @@ export async function getLeagueWinners(leagueID) {
         [leagueID]
     );
     return res.rows;
+}
 
+export async function getLeagueSeasons(leagueID) {
+    const res = await pool.query(
+        `
+            SELECT year
+            FROM league_season
+            WHERE league_id = $1;
+        `,
+        [leagueID]
+    );
+    return res.rows;
 }
 
 

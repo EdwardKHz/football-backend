@@ -389,5 +389,3 @@ async function syncLeagueMostRedCards(leagueId, year) {
 
 
 
-
-
