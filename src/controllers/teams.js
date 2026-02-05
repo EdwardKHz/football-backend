@@ -37,7 +37,7 @@ teamRouter.get("/:teamID/venue", async (req, res) => {
     }
 });
 
-teamRouter.get("/:teamID/leagues/:season", async (req, res) => {
+teamRouter.get("/:teamID/season/:season", async (req, res) => {
     try {
         const { teamID, season } = req.params;
 

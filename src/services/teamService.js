@@ -10,19 +10,20 @@ export async function getTeamInfo(id) {
         `,
         [id]
     );
-    return res.rows;
+    return res.rows[0];
 }
 
 export async function getTeamVenue(id) {
     const res = await pool.query(
         `
-            SELECT *
-            FROM venue
-            WHERE id = $1;
+            SELECT v.id, v.name, v.address, v.city, v.capacity, v.image FROM venue v
+            JOIN team ON team.venue_id = v.id
+            WHERE team.id = $1;
+
         `,
         [id]
     );
-    return res.rows;
+    return res.rows[0];
 }
 
 export async function getTeamLeagues(id, year) {
@@ -30,7 +31,7 @@ export async function getTeamLeagues(id, year) {
         `
             SELECT league_id, l.name FROM standings s
             JOIN league l ON s.league_id = l.id
-            WHERE team.id = $1 AND s.season = $2;
+            WHERE s.team_id = $1 AND s.season = $2;
         `,
         [id, year]
     );
