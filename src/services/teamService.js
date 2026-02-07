@@ -37,3 +37,37 @@ export async function getTeamLeagues(id, year) {
     );
     return res.rows;
 }
+
+export async function getTeamPlayers(id) {
+    const res = await pool.query(
+        `
+            SELECT id, name, age, number, position, photo
+            FROM players
+            WHERE teamid = $1;
+        `,
+        [id]
+    );
+    return res.rows;
+}
+
+export async function getTeamLeagueStandings(id) {
+    const res = await pool.query(
+        `
+            SELECT 
+                (home_wins + away_wins)                                               AS wins,
+                (home_losses + away_losses)                                           AS losses,
+                (home_draws + away_draws)                                             AS draws,
+                ROUND((home_wins + away_wins) * 1.0 / (home_played + away_played), 2) AS win_percentage,
+                ROUND((points * 1.0) / (home_played + away_played), 1)                AS points_per_game,
+                season,
+                l.name                                                                AS league_name,
+                l.logo                                                                AS league_logo,
+                rank
+                FROM standings
+                JOIN league l ON l.id = league_id
+                WHERE team_id = $1;
+        `,
+        [id]
+    );
+    return res.rows;
+}
